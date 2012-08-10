@@ -1,0 +1,24 @@
+* Stage Manager
+** Rearrange stage order
+** Add New Stage
+** Remove Stage
+* Stage
+** Rearrange current stage
+** Jump to next stage
+** Jump to previous stage
+** Jump to far stage
+** Save Stage
+** Share Stage
+** Duplicate Stage
+** Rename Stage
+* Visualization
+** Add New Visualization
+** Remove Visualization
+** Duplicate Visualization
+** Configure Visualization
+** Move Visualization to other stage
+** Share Visualization
+* Layout
+** Grid
+** Freeform
+** Stack
