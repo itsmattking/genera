@@ -11,6 +11,10 @@ wall.module(function(wall, $, window) {
 
   wall.Mixins.mix(Workspace);
 
+  Workspace.prototype.setName = function(name) {
+    this.name = name;
+  };
+
   Workspace.prototype.setID = function(id) {
     this.id = id;
     this.container.append('<h4 contenteditable="true" spellcheck="false">' + (this.name || this.id) + '</h4>');
@@ -18,7 +22,7 @@ wall.module(function(wall, $, window) {
   };
 
   Workspace.prototype.resetPosition = function() {
-    this.container.removeClass(wall.WorkspaceManager.POSITION_CLASS_LIST);
+    this.container.removeClass(wall.classNames.POSITIONS);
   };
 
   Workspace.prototype.setPosition = function(position) {
@@ -36,6 +40,16 @@ wall.module(function(wall, $, window) {
 
   Workspace.prototype.cleanupPanels = function() {
     this.layout.adjust(this.panels);
+  };
+
+  Workspace.prototype.panelToTop = function(panel) {
+    this.panels.map(function(p) {
+      if (p === panel) {
+        p.container.css({ zIndex: 99 });
+      } else {
+        p.container.css({ zIndex: 98 });
+      }
+    });
   };
 
   Workspace.prototype.removePanel = function(panel) {
@@ -69,9 +83,22 @@ wall.module(function(wall, $, window) {
     return newWorkspace;
   };
 
+  Workspace.prototype.save = function() {
+    window.localStorage.setItem('workspace:' + this.id,
+                            window.JSON.stringify(this.toJSON())
+                           );
+  };
+
   Workspace.prototype.toJSON = function() {
-    return window.JSON.stringify({
+    var out = {
+      id: this.id,
+      name: this.name,
+      layout: this.layout.toJSON()
+    };
+    out.panels = this.panels.map(function(p) {
+      return p.toJSON();
     });
+    return out;
   };
 
   wall.Workspace = Workspace;

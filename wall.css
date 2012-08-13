@@ -5,6 +5,10 @@ body {
   overflow: hidden;
   font-family: helvetica, sans-serif;
 }
+body.dragging {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
 .workspace {
   z-index: 20;
   position: absolute;
@@ -49,6 +53,20 @@ body {
   -ms-transform: scale(1);
   transform: scale(1);
 }
+.workspace .panel.dragging {
+  -webkit-transform: scale(0.98);
+  -moz-transform: scale(0.98);
+  -ms-transform: scale(0.98);
+  transform: scale(0.98);
+  -webkit-transition: none;
+  -moz-transition: none;
+  transition: none;
+  filter: alpha(opacity=90);
+  -khtml-opacity: 0.9;
+  -moz-opacity: 0.9;
+  opacity: 0.9;
+  z-index: 1000;
+}
 .workspace.current {
   -webkit-transform: translate3d(0, 0, 0);
   -moz-transform: translate3d(0, 0, 0);
@@ -75,10 +93,10 @@ body {
   display: block;
 }
 .workspace.far-previous {
-  -webkit-transform: translate3d(-200% x, 0, 500px) rotatey(10deg);
-  -moz-transform: translate3d(-200% x, 0, 500px) rotatey(10deg);
-  -ms-transform: translate3d(-200% x, 0, 500px) rotatey(10deg);
-  transform: translate3d(-200% x, 0, 500px) rotatey(10deg);
+  -webkit-transform: translate3d(-200%, 0, 500px) rotatey(10deg);
+  -moz-transform: translate3d(-200%, 0, 500px) rotatey(10deg);
+  -ms-transform: translate3d(-200%, 0, 500px) rotatey(10deg);
+  transform: translate3d(-200%, 0, 500px) rotatey(10deg);
 }
 .workspace.next {
   -webkit-transform: translate3d(200%, 0, 300px) rotatey(-10deg) scale(0.9);

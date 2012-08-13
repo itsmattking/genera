@@ -1,15 +1,52 @@
 /*global wall:true*/
 wall.module(function(wall, $, window) {
 
+  var draggedPanel,
+      events = wall.events,
+      classNames = wall.classNames;
+
+  function startDrag(e, panel) {
+    draggedPanel = panel;
+    draggedPanel.offsetX = e.offsetX || (e.pageX - $(e.target).offset().left);
+    draggedPanel.offsetY = e.offsetY || (e.pageY - $(e.target).offset().top);
+    draggedPanel.container.addClass(classNames.DRAGGING);
+    draggedPanel.workspace.panelToTop(draggedPanel);
+    $(window).on(events.MOUSEUP, stopDrag).on(events.MOUSEMOVE, handleDrag);
+    $(document.body).addClass(classNames.DRAGGING);
+    draggedPanel.onDragStart(e);
+  }
+
+  function stopDrag(e) {
+    $(window).off(events.MOUSEUP, stopDrag).off(events.MOUSEMOVE, handleDrag);
+    if (draggedPanel) {
+      draggedPanel.container.removeClass(classNames.DRAGGING);
+      $(document.body).removeClass(classNames.DRAGGING);
+      draggedPanel.onDragEnd(e);
+      draggedPanel = null;
+    }
+  }
+
+  function handleDrag(e) {
+    var offset = draggedPanel.workspace.container.offset();
+    var top = e.clientY - offset.top - draggedPanel.offsetY;
+    var left = e.clientX - offset.left - draggedPanel.offsetX;
+    top = top > 60 ? top : 60,
+    left = left > 10 ? left : 10;
+    draggedPanel.setPosition({ x: left, y: top });
+    draggedPanel.onDrag(e);
+  }
+
   function Panel(opts) {
     opts = opts || {};
     this.workspace = opts.workspace;
     this.container = $('<div class="panel"></div>');
-//     this.container.on('click', function() {
-//       this.workspace.removePanel(this);
-//     }.bind(this));
-    this.container.on('mousedown', this.onDragStart)
-      .on('mouseup', this.onDragEnd);
+    this.x = 0;
+    this.y = 0;
+    this.offsetX = 0;
+    this.offsetY = 0;
+    this.container.on(events.MOUSEDOWN, function(e) {
+      startDrag(e, this);
+    }.bind(this)).on(events.MOUSEUP, stopDrag);
   }
 
   wall.Mixins.mix(Panel);
@@ -20,31 +57,34 @@ wall.module(function(wall, $, window) {
   };
 
   Panel.prototype.setPosition = function(opts) {
+    this.x = opts.x || 0;
+    this.y = opts.y || 0;
     this.container.css({
-      left: (opts.x || 0),
-      top: (opts.y || 0)
+      left: this.x,
+      top: this.y
     });
   };
 
   Panel.prototype.remove = function() {
+    this.container.off();
     this.container.remove();
     this.onRemove.call(this);
   };
 
   Panel.prototype.reveal = function() {
     window.setTimeout(function() {
-      this.container.addClass('open');
+      this.container.addClass(classNames.OPEN);
     }.bind(this), 15);
   };
 
   Panel.prototype.hide = function(callback) {
     if (callback) {
-      this.container.on('webkitTransitionEnd transitionend', function() {
-        this.container.off('webkitTransitionEnd transitionend');
+      this.container.on(events.TRANSITION, function() {
+        this.container.off(events.TRANSITION);
         callback();
       }.bind(this));
     }
-    this.container.removeClass('open');
+    this.container.removeClass(classNames.OPEN);
   };
 
   Panel.prototype.clone = function() {
@@ -54,36 +94,19 @@ wall.module(function(wall, $, window) {
   };
 
   Panel.prototype.onDrag = function(e) {
-    var top = e.clientY - this.workspace.offset().top - this.offsetY,
-      left = e.clientX - this.workspace.offset().left - this.offsetX;
-    /* Reset position back to 0 if outside box */
-    top = top > 10 ? top : 10,
-    left = left > 10 ? left : 10;
-    this.container.css({
-      top: top,
-      left: left,
-      right: 'auto',
-      bottom: 'auto'
-    });
   };
 
   Panel.prototype.onDragEnd = function(e) {
-    $(window).off('mouseup', this.onDragEnd).off('mousemove', this.onDrag);
-    this.container.removeClass('dragging');
-    $(document.body).removeClass('dragging');
   };
 
   Panel.prototype.onDragStart = function(e) {
-    this.offsetX = e.offsetX || (e.pageX - $(e.target).offset().left);
-    this.offsetY = e.offsetY || (e.pageY - $(e.target).offset().top);
-    $(window).on('mouseup', this.onDragEnd).on('mousemove', this.onDrag);
-    this.container.addClass('dragging');
-    $(document.body).addClass('dragging');
   };
 
   Panel.prototype.toJSON = function() {
-    return window.JSON.stringify({
-    });
+    return {
+      x: this.x,
+      y: this.y
+    };
   };
 
   wall.Panel = Panel;

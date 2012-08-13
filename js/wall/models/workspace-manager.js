@@ -1,8 +1,10 @@
 /*global wall:true*/
 wall.module(function(wall, $, window) {
 
-  var POSITION_CLASS_LIST = 'far-previous previous current next far-next forward backward';
-  var POSITIONS = POSITION_CLASS_LIST.split(' ').reduce(function(memo, item) {
+  var events = wall.events,
+      classNames = wall.classNames;
+
+  var POSITIONS = classNames.POSITIONS.split(' ').reduce(function(memo, item) {
     memo[item.toUpperCase().replace('-', '_')] = item;
     return memo;
   }, {});
@@ -10,10 +12,24 @@ wall.module(function(wall, $, window) {
   function WorkspaceManager(opts) {
     opts = opts || {};
     this.container = opts.container;
-    this.container.addClass('animate');
+    this.container.addClass(classNames.ANIMATE);
     this.workspaces = [];
     this.currentWorkspace = 0;
   }
+
+  WorkspaceManager.prototype.cleanupCurrentWorkspace = function() {
+    this.getCurrentWorkspace().cleanupPanels();
+  };
+
+  WorkspaceManager.prototype.cloneCurrentWorkspace = function() {
+    var s = this.getCurrentWorkspace().clone();
+    this.addWorkspace(s);
+    this.goToWorkspace(s);
+  };
+
+  WorkspaceManager.prototype.saveCurrentWorkspace = function() {
+    this.getCurrentWorkspace().save();
+  };
 
   WorkspaceManager.prototype.addWorkspace = function(workspace) {
     workspace.attach(this.container);
@@ -74,7 +90,7 @@ wall.module(function(wall, $, window) {
 
   WorkspaceManager.prototype.skipToWorkspace = function(num) {
     num = parseInt(num, 10);
-    this.container.removeClass('animate');
+    this.container.removeClass(classNames.ANIMATE);
 
     var current, next;
 
@@ -92,12 +108,12 @@ wall.module(function(wall, $, window) {
     }.bind(this));
 
     if (current && next) {
-      this.container.addClass('animate');
-      next.container.on('webkitTransitionEnd transitionend', function(e) {
-        this.container.removeClass('animate');
+      this.container.addClass(classNames.ANIMATE);
+      next.container.on(events.TRANSITION, function(e) {
+        this.container.removeClass(classNames.ANIMATE);
         this.moveToCurrentWorkspace();
-        this.container.addClass('animate');
-        next.container.off('webkitTransitionEnd transitionend');
+        this.container.addClass(classNames.ANIMATE);
+        next.container.off(events.TRANSITION);
       }.bind(this));
       window.setTimeout(function() {
         current.setPosition(POSITIONS.BACKWARD);
@@ -126,7 +142,6 @@ wall.module(function(wall, $, window) {
     });
   };
 
-  WorkspaceManager.POSITION_CLASS_LIST = POSITION_CLASS_LIST;
   WorkspaceManager.POSITIONS = POSITIONS;
 
   wall.WorkspaceManager = WorkspaceManager;

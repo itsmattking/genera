@@ -143,13 +143,17 @@
   function handleManageMenu(e) {
     var action = $(e.target).attr('data-action');
     switch (action) {
+     case 'save-workspace':
+      manager.saveCurrentWorkspace();
+      break;
+     case 'arrange-workspace':
+      manager.cleanupCurrentWorkspace();
+      break;
      case 'remove-workspace':
       manager.removeWorkspace(manager.getCurrentWorkspace());
       break;
      case 'duplicate-workspace':
-      var s = manager.getCurrentWorkspace().clone();
-      manager.addWorkspace(s);
-      manager.goToWorkspace(s);
+      manager.cloneCurrentWorkspace();
       updatePaging();
       setTimeout(promptNameEdit, 500);
       setTimeout(function() {
@@ -182,9 +186,15 @@
 
   $('#wall').on('keydown keyup', '.workspace h4', function(e) {
     switch (e.keyCode) {
+     case 9:
+      $(e.target).blur();
+      manager.getCurrentWorkspace().setName($(e.target).text());
+      e.preventDefault();
+      break;
      case 13:
       e.preventDefault();
       $(e.target).blur();
+      manager.getCurrentWorkspace().setName($(e.target).text());
       break;
      case 37:
       e.stopPropagation();
@@ -224,5 +234,45 @@
   setTimeout(function() {
     $('.paging').addClass('animate');
   }, 15);
+
+  var startTouch = {
+    x: 0,
+    y: 0
+  },
+  endTouch = {
+    x: 0,
+    y: 0
+  };
+  var resetMove;
+  $('#wall').on('touchstart', function(e) {
+    startTouch.x = e.originalEvent.touches[0].clientX;
+    startTouch.y = e.originalEvent.touches[0].clientY;
+  });
+  $('#wall').on('touchend', function(e) {
+    clearTimeout(resetMove);
+    var diff = startTouch.x - endTouch.x;
+    if (Math.abs(diff) > 200) {
+      if (diff < 0) {
+        manager.previousWorkspace();
+      } else {
+        manager.nextWorkspace();
+      }
+    }
+    startTouch.x = 0, startTouch.y = 0;
+    endTouch.x = 0, endTouch.y = 0;
+  });
+  $('#wall').on('touchmove', function(e) {
+    if (e.originalEvent) {
+      window.console.log(e.originalEvent.touches[0].webkitForce);
+      endTouch.x = e.originalEvent.touches[0].clientX;
+      endTouch.y = e.originalEvent.touches[0].clientY;
+      e.preventDefault();
+    }
+    clearTimeout(resetMove);
+    resetMove = setTimeout(function() {
+      startTouch.x = 0;
+      endTouch.y = 0;
+    }, 200);
+  });
 
 }(wall, jQuery, window));

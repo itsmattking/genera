@@ -6,6 +6,8 @@ wall.module(function(wall, $, window) {
     this.items = [];
   }
 
+  wall.Mixins.mix(Layout);
+
   Layout.prototype.adjust = function(list) {
     list.forEach(function(v, i) {
       v.setPosition({
