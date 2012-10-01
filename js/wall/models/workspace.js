@@ -3,7 +3,9 @@ wall.module(function(wall, $, window) {
 
   function Workspace(opts) {
     opts = opts || {};
+    this.id = opts.id;
     this.name = opts.name;
+    this.fromStore = opts.fromStore;
     this.layout = opts.layout || new wall.Layout({});
     this.panels = [];
     this.container = $('<div class="workspace"></div>');
@@ -57,6 +59,9 @@ wall.module(function(wall, $, window) {
       panel.remove();
       this.panels.splice(this.panels.indexOf(panel), 1);
       this.cleanupPanels();
+      if (this.fromStore) {
+        this.save();
+      }
     }.bind(this));
   };
 
@@ -72,6 +77,7 @@ wall.module(function(wall, $, window) {
     };
     this.container.remove();
     this.onRemove.call(this);
+    window.localStorage.removeItem('workspace:' + this.id);
   };
 
   Workspace.prototype.clone = function() {
@@ -83,7 +89,20 @@ wall.module(function(wall, $, window) {
     return newWorkspace;
   };
 
+  Workspace.prototype.onEnter = function() {
+    this.panels.forEach(function(p) {
+      p.onEnter.call(p);
+    });
+  };
+
+  Workspace.prototype.onLeave = function() {
+    this.panels.forEach(function(p) {
+      p.onLeave.call(p);
+    });
+  };
+
   Workspace.prototype.save = function() {
+    this.fromStore = true;
     window.localStorage.setItem('workspace:' + this.id,
                             window.JSON.stringify(this.toJSON())
                            );

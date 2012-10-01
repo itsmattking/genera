@@ -3,7 +3,6 @@ wall.module(function(wall, $, window) {
 
   function Layout(opts) {
     opts = opts || {};
-    this.items = [];
   }
 
   wall.Mixins.mix(Layout);

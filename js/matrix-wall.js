@@ -11,7 +11,7 @@
   function addVis() {
     var s = new Workspace();
     for (var i = 0, len = Math.ceil(Math.random()*9); i < len; i++) {
-      s.addPanel(new Panel());
+      s.addPanel(new Panel({}));
     }
     manager.addWorkspace(s);
   }
@@ -221,7 +221,7 @@
   });
 
   $('#new-panel-hud img').on('click', function() {
-    manager.getCurrentWorkspace().addPanel(new Panel());
+    manager.getCurrentWorkspace().addPanel(new Panel({}));
     toggleHUD('#new-panel-hud');
     return false;
   });

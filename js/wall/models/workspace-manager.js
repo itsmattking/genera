@@ -9,6 +9,20 @@ wall.module(function(wall, $, window) {
     return memo;
   }, {});
 
+  function handleWorkspaceEnter(workspace) {
+    workspace.container.on(events.TRANSITION, function(e) {
+      $(this).off(events.TRANSITION);
+      workspace.onEnter.call(workspace);
+    });
+  }
+
+  function handleWorkspaceLeave(workspace) {
+    workspace.container.on(events.TRANSITION, function(e) {
+      $(this).off(events.TRANSITION);
+      workspace.onLeave.call(workspace);
+    });
+  }
+
   function WorkspaceManager(opts) {
     opts = opts || {};
     this.container = opts.container;
@@ -17,12 +31,24 @@ wall.module(function(wall, $, window) {
     this.currentWorkspace = 0;
   }
 
+  WorkspaceManager.prototype.loadWorkspaces = function(callback) {
+    var out = [];
+    for (var k in window.localStorage) {
+      if (k.match(/^workspace:/)) {
+        out.push(window.JSON.parse(window.localStorage[k]));
+      }
+    }
+    callback(out);
+  };
+
   WorkspaceManager.prototype.cleanupCurrentWorkspace = function() {
     this.getCurrentWorkspace().cleanupPanels();
   };
 
   WorkspaceManager.prototype.cloneCurrentWorkspace = function() {
     var s = this.getCurrentWorkspace().clone();
+    s.id = 'workspace-' + new Date().getTime();
+    s.setName(s.name + ' Copy');
     this.addWorkspace(s);
     this.goToWorkspace(s);
   };
@@ -33,7 +59,7 @@ wall.module(function(wall, $, window) {
 
   WorkspaceManager.prototype.addWorkspace = function(workspace) {
     workspace.attach(this.container);
-    workspace.setID('workspace-' + (this.workspaces.length));
+    workspace.setID(workspace.id || ('workspace-' + new Date().getTime()));
     this.workspaces.push(workspace);
   };
 
@@ -114,6 +140,11 @@ wall.module(function(wall, $, window) {
         this.moveToCurrentWorkspace();
         this.container.addClass(classNames.ANIMATE);
         next.container.off(events.TRANSITION);
+        next.onLeave.call(next);
+      }.bind(this));
+      current.container.on(events.TRANSITION, function(e) {
+        current.container.off(events.TRANSITION);
+        current.onEnter.call(current);
       }.bind(this));
       window.setTimeout(function() {
         current.setPosition(POSITIONS.BACKWARD);
@@ -125,14 +156,18 @@ wall.module(function(wall, $, window) {
 
   WorkspaceManager.prototype.nextWorkspace = function() {
     if (this.currentWorkspace < this.workspaces.length - 1) {
+      handleWorkspaceLeave(this.workspaces[this.currentWorkspace]);
       this.currentWorkspace += 1;
+      handleWorkspaceEnter(this.workspaces[this.currentWorkspace]);
     }
     this.moveToCurrentWorkspace();
   };
 
   WorkspaceManager.prototype.previousWorkspace = function() {
     if (this.currentWorkspace > 0) {
+      handleWorkspaceLeave(this.workspaces[this.currentWorkspace]);
       this.currentWorkspace -= 1;
+      handleWorkspaceEnter(this.workspaces[this.currentWorkspace]);
     }
     this.moveToCurrentWorkspace();
   };

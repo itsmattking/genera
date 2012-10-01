@@ -6,9 +6,14 @@ wall.module(function(wall, $, window) {
       classNames = wall.classNames;
 
   function startDrag(e, panel) {
+    var target = $(e.target);
+    if (target.hasClass('remove')) {
+      panel.workspace.removePanel(panel);
+      return;
+    }
     draggedPanel = panel;
-    draggedPanel.offsetX = e.offsetX || (e.pageX - $(e.target).offset().left);
-    draggedPanel.offsetY = e.offsetY || (e.pageY - $(e.target).offset().top);
+    draggedPanel.offsetX = e.offsetX || (e.pageX - target.offset().left);
+    draggedPanel.offsetY = e.offsetY || (e.pageY - target.offset().top);
     draggedPanel.container.addClass(classNames.DRAGGING);
     draggedPanel.workspace.panelToTop(draggedPanel);
     $(window).on(events.MOUSEUP, stopDrag).on(events.MOUSEMOVE, handleDrag);
@@ -37,16 +42,19 @@ wall.module(function(wall, $, window) {
   }
 
   function Panel(opts) {
-    opts = opts || {};
-    this.workspace = opts.workspace;
-    this.container = $('<div class="panel"></div>');
-    this.x = 0;
-    this.y = 0;
-    this.offsetX = 0;
-    this.offsetY = 0;
-    this.container.on(events.MOUSEDOWN, function(e) {
-      startDrag(e, this);
-    }.bind(this)).on(events.MOUSEUP, stopDrag);
+    if (opts) {
+      opts = opts || {};
+      this.workspace = opts.workspace;
+      this.container = $('<div class="panel"></div>');
+      this.x = opts.x || 0;
+      this.y = opts.y || 0;
+      this.offsetX = 0;
+      this.offsetY = 0;
+      this.container.on(events.MOUSEDOWN, function(e) {
+        startDrag(e, this);
+      }.bind(this)).on(events.MOUSEUP, stopDrag);
+    }
+    return this;
   }
 
   wall.Mixins.mix(Panel);
