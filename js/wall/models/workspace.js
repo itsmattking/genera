@@ -1,6 +1,14 @@
 /*global wall:true*/
 wall.module(function(wall, $, window) {
 
+  var events = wall.events,
+      classNames = wall.classNames;
+
+  var POSITIONS = classNames.POSITIONS.split(' ').reduce(function(memo, item) {
+    memo[item.toUpperCase().replace('-', '_')] = item;
+    return memo;
+  }, {});
+
   function Workspace(opts) {
     opts = opts || {};
     this.id = opts.id;
@@ -12,6 +20,10 @@ wall.module(function(wall, $, window) {
   }
 
   wall.Mixins.mix(Workspace);
+
+  Workspace.prototype.isVisible = function() {
+    return this.container.hasClass(POSITIONS.CURRENT);
+  };
 
   Workspace.prototype.setName = function(name) {
     this.name = name;
@@ -38,6 +50,15 @@ wall.module(function(wall, $, window) {
     this.panels.push(panel);
     this.cleanupPanels();
     panel.reveal();
+  };
+
+  Workspace.prototype.getPanel = function(id) {
+    for (var i = 0; i < this.panels.length; i++) {
+      if (this.panels[i].id === id) {
+        return this.panels[i];
+      }
+    }
+    return null;
   };
 
   Workspace.prototype.cleanupPanels = function() {
@@ -71,13 +92,17 @@ wall.module(function(wall, $, window) {
   };
 
   Workspace.prototype.remove = function(el) {
-    var p;
-    while ((p = this.panels.shift())) {
-      p.remove();
-    };
-    this.container.remove();
-    this.onRemove.call(this);
-    window.localStorage.removeItem('workspace:' + this.id);
+    this.container.on(events.TRANSITION, function() {
+      var p;
+      while ((p = this.panels.shift())) {
+        p.remove();
+      };
+      this.container.off();
+      this.container.remove();
+      this.onRemove.call(this);
+      window.localStorage.removeItem('workspace:' + this.id);
+    }.bind(this));
+    this.container.removeClass(POSITIONS.CURRENT).addClass(POSITIONS.BACKWARD);
   };
 
   Workspace.prototype.clone = function() {

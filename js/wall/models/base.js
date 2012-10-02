@@ -3,10 +3,12 @@ wall.module(function(wall, $, window) {
 
   function Base() {}
 
-  Base.inherit = function(other) {
-    Base.call(other);
+  Base.inherit = function(other, parent) {
+    parent = parent || Base;
+    parent.call(other);
     Mixins.mix(other);
-    other.inherit = Base.inherit;
+    other.prototype = new (parent)();
+    other.inherit = parent.inherit;
   };
 
   function Mixins() {}
