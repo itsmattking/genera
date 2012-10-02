@@ -234,7 +234,7 @@ body.dragging {
 }
 #nav ul.menu li:hover {
   cursor: pointer;
-  background: rgba(217, 217, 217, 0.3);
+  background: #ededed;
 }
 #nav ul.menu li.header {
   border-bottom: 1px solid #999;
