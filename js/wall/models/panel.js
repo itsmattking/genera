@@ -7,10 +7,6 @@ wall.module(function(wall, $, window) {
 
   function startDrag(e, panel) {
     var target = $(e.target);
-    if (target.hasClass('remove')) {
-      panel.workspace.removePanel(panel);
-      return;
-    }
     draggedPanel = panel;
     draggedPanel.offsetX = e.offsetX || (e.pageX - target.offset().left);
     draggedPanel.offsetY = e.offsetY || (e.pageY - target.offset().top);
@@ -44,15 +40,21 @@ wall.module(function(wall, $, window) {
   function Panel(opts) {
     if (opts) {
       opts = opts || {};
+      this.id = opts.id || 'panel-' + new Date().getTime();
       this.workspace = opts.workspace;
       this.container = $('<div class="panel"></div>');
+      this.container.attr('id', this.id);
       this.x = opts.x || 0;
       this.y = opts.y || 0;
       this.offsetX = 0;
       this.offsetY = 0;
-      this.container.on(events.MOUSEDOWN, function(e) {
+      this.container.on(events.CLICK, '.remove', function(e) {
+        this.workspace.removePanel(this);
+        return false;
+      }.bind(this));
+      this.container.on(events.MOUSEDOWN, '.draghandle', function(e) {
         startDrag(e, this);
-      }.bind(this)).on(events.MOUSEUP, stopDrag);
+      }.bind(this)).on(events.MOUSEUP, '.draghandle', stopDrag);
     }
     return this;
   }
@@ -112,6 +114,7 @@ wall.module(function(wall, $, window) {
 
   Panel.prototype.toJSON = function() {
     return {
+      id: this.id,
       x: this.x,
       y: this.y
     };

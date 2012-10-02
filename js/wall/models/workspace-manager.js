@@ -68,6 +68,7 @@ wall.module(function(wall, $, window) {
     var index = this.workspaces.indexOf(workspace);
     this.workspaces.splice(index, 1);
     this.currentWorkspace = (index > this.workspaces.length - 1) ? index - 1 : index;
+    handleWorkspaceEnter(this.workspaces[this.currentWorkspace]);
     this.moveToCurrentWorkspace();
   };
 
@@ -108,7 +109,9 @@ wall.module(function(wall, $, window) {
       if (Math.abs(workspaceOrNum - this.currentWorkspace) > 1) {
         this.skipToWorkspace(workspaceOrNum);
       } else {
+        handleWorkspaceLeave(this.workspaces[this.currentWorkspace]);
         this.currentWorkspace = workspaceOrNum;
+        handleWorkspaceEnter(this.workspaces[this.currentWorkspace]);
         this.moveToCurrentWorkspace();
       }
     }
@@ -140,11 +143,11 @@ wall.module(function(wall, $, window) {
         this.moveToCurrentWorkspace();
         this.container.addClass(classNames.ANIMATE);
         next.container.off(events.TRANSITION);
-        next.onLeave.call(next);
+        next.onEnter.call(next);
       }.bind(this));
       current.container.on(events.TRANSITION, function(e) {
         current.container.off(events.TRANSITION);
-        current.onEnter.call(current);
+        current.onLeave.call(current);
       }.bind(this));
       window.setTimeout(function() {
         current.setPosition(POSITIONS.BACKWARD);
