@@ -116,7 +116,12 @@ workspace.addPanel(new ExtendedPanel({ title: 'New Panel' });
 <ul>
 <li>
 <code>toJSON</code>: Return the serialized version of your Panel to be saved into store</li>
-</ul><h2>Example Dashboard</h2>
+</ul><h2>Handling Layouts</h2>
+
+<p>Currently Genera has a simple fixed-grid layout. It is extensible by subclassing
+<code>genera.Layout</code> and defining your own layout algorithm.</p>
+
+<h2>Example Dashboard</h2>
 
 <p>To get started, see index.html for an example dashboard setup utilizing all building blocks of Genera.</p>
 
@@ -125,6 +130,10 @@ workspace.addPanel(new ExtendedPanel({ title: 'New Panel' });
 <p>Genera depends on using CSS transitions to trigger events, so it's a good idea
 to use the example as a base to start from to get an idea of how it all works
 instead of starting from scratch.</p>
+
+<p>To enable dragging of a Panel, just add a DOM element with the class name 'draghandle'.</p>
+
+<p>To let a user remove a Panel, just add a DOM element with the class name 'remove'.</p>
 
 <h2>Dependencies</h2>
 
