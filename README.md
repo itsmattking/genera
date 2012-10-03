@@ -2,7 +2,7 @@
 
 ### The Panel
 
-Panels are generic DOM elements you define. They can contain anything you like.
+Panels are objects housing DOM elements. They can contain anything you like.
 
 ### The Workspace
 
