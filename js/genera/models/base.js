@@ -46,7 +46,7 @@ genera.module(function(genera, $, window) {
     other.prototype.toJSON = this.prototype.toJSON;
   };
 
-  genera['Mixins'] = Mixins;
-  genera['Base'] = Base;
+  genera.Mixins = Mixins;
+  genera.Base = Base;
 
 });

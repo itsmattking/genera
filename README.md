@@ -37,3 +37,32 @@ With these three building blocks you can build one dashboard to rule them all.
 
     workspace.addPanel(new Panel({}));
 
+## Extending Panels
+
+Panels are only a skeleton to contain what you define. Here's an example.
+
+    var Panel = genera.Panel;
+
+    function ExtendedPanel(opts) {
+      if (opts) {
+        Panel.call(this, opts);
+        this.container.append('<h3>' + opts.title + '</h3>');
+      }
+    }
+
+    ExtendedPanel.prototype = new Panel();
+
+You can define handlers for several events on a Panel:
+
+* `onAttach`: Called when a Panel is attached to a Workspace
+* `onRemove`: Called when a Panel is removed from a Workspace
+* `onEnter`: Called when the parent Workspace enters into view
+* `onLeave`: Called when the parent Workspace leaves view
+* `onClone`: Called when the Panel is cloned
+* `onDragStart`: Called when a Panel has begun a drag action
+* `onDrag`: Called when a Panel is dragged
+* `onDragEnd`: Called when a Panel has stopped a drag action
+
+There are also some other methods you'll want to override:
+
+* `toJSON`: Return the serialized version of your Panel to be saved into store
