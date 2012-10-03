@@ -31,6 +31,8 @@ genera.module(function(genera, $, window) {
     this.currentWorkspace = 0;
   }
 
+  genera.Base.inherit(WorkspaceManager);
+
   WorkspaceManager.prototype.loadWorkspaces = function(callback) {
     var out = [];
     for (var k in window.localStorage) {

@@ -5,7 +5,7 @@ genera.module(function(genera, $, window) {
     opts = opts || {};
   }
 
-  genera['Mixins'].mix(Layout);
+  genera.Base.inherit(Layout);
 
   Layout.prototype.adjust = function(list) {
     list.forEach(function(v, i) {
@@ -16,6 +16,6 @@ genera.module(function(genera, $, window) {
     });
   };
 
-  genera['Layout'] = Layout;
+  genera.Layout = Layout;
 
 });

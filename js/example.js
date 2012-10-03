@@ -4,6 +4,8 @@
     Workspace = genera.Workspace,
     Panel = genera.Panel;
 
+  var manager;
+
   function updatePaging() {
     var workspaceCount = manager.workspaces.length;
     if (workspaceCount === 1) {
@@ -46,10 +48,6 @@
     }
     $('.paging a').removeClass('active');
     $('.paging a[data-workspace="' + manager.getCurrentWorkspaceNum() + '"]').addClass('active');
-  });
-
-  $(window).on('resize', function() {
-    $('#wall').height($(window).height());
   });
 
   function toggleAddMenu() {
@@ -135,7 +133,7 @@
   $('#add-menu').on('click', 'li', handleAddMenu);
   $('#manage-menu').on('click', 'li', handleManageMenu);
 
-  $('#wall').on('keydown keyup', '.workspace h4', function(e) {
+  $('#container').on('keydown keyup', '.workspace h4', function(e) {
     switch (e.keyCode) {
      case 9:
       $(e.target).blur();
@@ -171,22 +169,28 @@
     }
   });
 
-  var manager = new WorkspaceManager({
-    container: $('#wall')
-  });
+  function initialize() {
+    manager = new WorkspaceManager({
+      container: $('#container')
+    });
 
-  var workspace = new Workspace({ name: 'Home' });
-  manager.addWorkspace(workspace);
-  manager.goToWorkspace(0);
+    var workspace = new Workspace({ name: 'Home' });
+    manager.addWorkspace(workspace);
+    manager.goToWorkspace(0);
 
-  $('#wall').height($(window).height());
-  $('.paging a').removeClass('active');
-  $('.paging a[data-workspace="' + manager.getCurrentWorkspaceNum() + '"]').addClass('active');
+    $('#container').height($(window).height());
 
-  updatePaging();
-  window.manager = manager;
-  setTimeout(function() {
-    $('.paging').addClass('animate');
-  }, 15);
+    updatePaging();
+
+    setTimeout(function() {
+      $('.paging').addClass('animate');
+    }, 15);
+
+    $(window).on('resize', function() {
+      $('#container').height($(window).height());
+    });
+  }
+
+  $(window).ready(initialize);
 
 }(genera, jQuery, window));

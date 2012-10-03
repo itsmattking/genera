@@ -19,7 +19,7 @@ genera.module(function(genera, $, window) {
     this.container = $('<div class="workspace"></div>');
   }
 
-  genera.Mixins.mix(Workspace);
+  genera.Base.inherit(Workspace);
 
   Workspace.prototype.isVisible = function() {
     return this.container.hasClass(POSITIONS.CURRENT);

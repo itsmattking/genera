@@ -59,7 +59,7 @@ genera.module(function(genera, $, window) {
     return this;
   }
 
-  genera.Mixins.mix(Panel);
+  genera.Base.inherit(Panel);
 
   Panel.prototype.attach = function(el) {
     el.append(this.container);
@@ -120,6 +120,6 @@ genera.module(function(genera, $, window) {
     };
   };
 
-  genera['Panel'] = Panel;
+  genera.Panel = Panel;
 
 });

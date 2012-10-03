@@ -46,7 +46,7 @@ Panels are only a skeleton to contain what you define. Here's an example.
       }
     }
 
-    ExtendedPanel.prototype = new Panel();
+    genera.Base.inherit(ExtendedPanel, Panel);
 
     workspace.addPanel(new ExtendedPanel({ title: 'New Panel' });
 
