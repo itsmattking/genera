@@ -1,5 +1,5 @@
-/*global wall:true*/
-wall.module(function(wall, $, window) {
+/*global genera:true*/
+genera.module(function(genera, $, window) {
 
   function Base() {}
 
@@ -29,11 +29,9 @@ wall.module(function(wall, $, window) {
   };
 
   Mixins.prototype.onLeave = function() {
-    console.log('leave');
   };
 
   Mixins.prototype.onEnter = function() {
-    console.log('enter');
   };
 
   Mixins.prototype.toJSON = function() {
@@ -48,7 +46,7 @@ wall.module(function(wall, $, window) {
     other.prototype.toJSON = this.prototype.toJSON;
   };
 
-  wall.Mixins = Mixins;
-  wall.Base = Base;
+  genera['Mixins'] = Mixins;
+  genera['Base'] = Base;
 
 });

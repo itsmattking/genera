@@ -1,11 +1,11 @@
-/*global wall:true*/
-wall.module(function(wall, $, window) {
+/*global genera:true*/
+genera.module(function(genera, $, window) {
 
   function Layout(opts) {
     opts = opts || {};
   }
 
-  wall.Mixins.mix(Layout);
+  genera['Mixins'].mix(Layout);
 
   Layout.prototype.adjust = function(list) {
     list.forEach(function(v, i) {
@@ -16,6 +16,6 @@ wall.module(function(wall, $, window) {
     });
   };
 
-  wall.Layout = Layout;
+  genera['Layout'] = Layout;
 
 });

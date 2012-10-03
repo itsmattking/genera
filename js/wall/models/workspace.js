@@ -1,8 +1,8 @@
-/*global wall:true*/
-wall.module(function(wall, $, window) {
+/*global genera:true*/
+genera.module(function(genera, $, window) {
 
-  var events = wall.events,
-      classNames = wall.classNames;
+  var events = genera.events,
+      classNames = genera.classNames;
 
   var POSITIONS = classNames.POSITIONS.split(' ').reduce(function(memo, item) {
     memo[item.toUpperCase().replace('-', '_')] = item;
@@ -14,12 +14,12 @@ wall.module(function(wall, $, window) {
     this.id = opts.id;
     this.name = opts.name;
     this.fromStore = opts.fromStore;
-    this.layout = opts.layout || new wall.Layout({});
+    this.layout = opts.layout || new genera.Layout({});
     this.panels = [];
     this.container = $('<div class="workspace"></div>');
   }
 
-  wall.Mixins.mix(Workspace);
+  genera.Mixins.mix(Workspace);
 
   Workspace.prototype.isVisible = function() {
     return this.container.hasClass(POSITIONS.CURRENT);
@@ -36,7 +36,7 @@ wall.module(function(wall, $, window) {
   };
 
   Workspace.prototype.resetPosition = function() {
-    this.container.removeClass(wall.classNames.POSITIONS);
+    this.container.removeClass(genera.classNames.POSITIONS);
   };
 
   Workspace.prototype.setPosition = function(position) {
@@ -96,7 +96,7 @@ wall.module(function(wall, $, window) {
       var p;
       while ((p = this.panels.shift())) {
         p.remove();
-      };
+      }
       this.container.off();
       this.container.remove();
       this.onRemove.call(this);
@@ -145,6 +145,6 @@ wall.module(function(wall, $, window) {
     return out;
   };
 
-  wall.Workspace = Workspace;
+  genera.Workspace = Workspace;
 
 });

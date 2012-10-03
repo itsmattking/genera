@@ -1,9 +1,9 @@
-/*global wall:true*/
-wall.module(function(wall, $, window) {
+/*global genera:true*/
+genera.module(function(genera, $, window) {
 
   var draggedPanel,
-      events = wall.events,
-      classNames = wall.classNames;
+      events = genera.events,
+      classNames = genera.classNames;
 
   function startDrag(e, panel) {
     var target = $(e.target);
@@ -59,7 +59,7 @@ wall.module(function(wall, $, window) {
     return this;
   }
 
-  wall.Mixins.mix(Panel);
+  genera.Mixins.mix(Panel);
 
   Panel.prototype.attach = function(el) {
     el.append(this.container);
@@ -120,6 +120,6 @@ wall.module(function(wall, $, window) {
     };
   };
 
-  wall.Panel = Panel;
+  genera['Panel'] = Panel;
 
 });

@@ -1,8 +1,8 @@
-(function(wall, $, window) {
+(function(genera, $, window) {
 
-  var WorkspaceManager = wall.WorkspaceManager,
-    Workspace = wall.Workspace,
-    Panel = wall.Panel;
+  var WorkspaceManager = genera.WorkspaceManager,
+    Workspace = genera.Workspace,
+    Panel = genera.Panel;
 
   var manager = new WorkspaceManager({
     container: $('#wall')
@@ -275,4 +275,4 @@
     }, 200);
   });
 
-}(wall, jQuery, window));
+}(genera, jQuery, window));

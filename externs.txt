@@ -1,0 +1,3 @@
+var genera = {};
+genera.module = function(fn) {};
+

@@ -1,8 +1,8 @@
-/*global wall:true*/
-wall.module(function(wall, $, window) {
+/*global genera:true*/
+genera.module(function(genera, $, window) {
 
-  var events = wall.events,
-      classNames = wall.classNames;
+  var events = genera.events,
+      classNames = genera.classNames;
 
   var POSITIONS = classNames.POSITIONS.split(' ').reduce(function(memo, item) {
     memo[item.toUpperCase().replace('-', '_')] = item;
@@ -102,7 +102,7 @@ wall.module(function(wall, $, window) {
   };
 
   WorkspaceManager.prototype.goToWorkspace = function(workspaceOrNum) {
-    if (workspaceOrNum instanceof wall.Workspace && this.workspaces.indexOf(workspaceOrNum) !== -1) {
+    if (workspaceOrNum instanceof genera.Workspace && this.workspaces.indexOf(workspaceOrNum) !== -1) {
       this.skipToWorkspace(this.workspaces.indexOf(workspaceOrNum));
     } else if (workspaceOrNum >= 0 && workspaceOrNum < this.workspaces.length) {
       workspaceOrNum = parseInt(workspaceOrNum, 10);
@@ -182,6 +182,6 @@ wall.module(function(wall, $, window) {
 
   WorkspaceManager.POSITIONS = POSITIONS;
 
-  wall.WorkspaceManager = WorkspaceManager;
+  genera.WorkspaceManager = WorkspaceManager;
 
 });
