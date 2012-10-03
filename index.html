@@ -31,9 +31,27 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h1>Create fluid dashboards out of disparate parts</h1>
+        <h2>Create fluid dashboards out of disparate parts</h2>
 
-<h2>How it works</h2>
+<p>Genera is an extensible dashboard framework.</p>
+
+<h2>Concepts</h2>
+
+<h3>The Panel</h3>
+
+<p>Panels are generic DOM elements you define. They can contain anything you like.</p>
+
+<h3>The Workspace</h3>
+
+<p>Workspace contains and handles sets of panels.</p>
+
+<h3>The Workspace Manager</h3>
+
+<p>Workspace Manager contains multiple workspaces.</p>
+
+<p>With these three building blocks you can build one dashboard to rule them all.</p>
+
+<h2>Example Setup</h2>
 
 <pre><code>var WorkspaceManager = genera.WorkspaceManager,
     Workspace = genera.Workspace,
@@ -52,6 +70,48 @@ manager.goToWorkspace(workspace);
 
 workspace.addPanel(new Panel({}));
 </code></pre>
+
+<h2>Extending Panels</h2>
+
+<p>Panels are only a skeleton to contain what you define. Here's an example.</p>
+
+<pre><code>var Panel = genera.Panel;
+
+function ExtendedPanel(opts) {
+  if (opts) {
+    Panel.call(this, opts);
+    this.container.append('&lt;h3&gt;' + opts.title + '&lt;/h3&gt;');
+  }
+}
+
+ExtendedPanel.prototype = new Panel();
+</code></pre>
+
+<p>You can define handlers for several events on a Panel:</p>
+
+<ul>
+<li>
+<code>onAttach</code>: Called when a Panel is attached to a Workspace</li>
+<li>
+<code>onRemove</code>: Called when a Panel is removed from a Workspace</li>
+<li>
+<code>onEnter</code>: Called when the parent Workspace enters into view</li>
+<li>
+<code>onLeave</code>: Called when the parent Workspace leaves view</li>
+<li>
+<code>onClone</code>: Called when the Panel is cloned</li>
+<li>
+<code>onDragStart</code>: Called when a Panel has begun a drag action</li>
+<li>
+<code>onDrag</code>: Called when a Panel is dragged</li>
+<li>
+<code>onDragEnd</code>: Called when a Panel has stopped a drag action</li>
+</ul><p>There are also some other methods you'll want to override:</p>
+
+<ul>
+<li>
+<code>toJSON</code>: Return the serialized version of your Panel to be saved into store</li>
+</ul>
       </section>
     </div>
 
