@@ -138,12 +138,14 @@
      case 9:
       $(e.target).blur();
       manager.getCurrentWorkspace().setName($(e.target).text());
+      manager.getCurrentWorkspace().save();
       e.preventDefault();
       break;
      case 13:
       e.preventDefault();
       $(e.target).blur();
       manager.getCurrentWorkspace().setName($(e.target).text());
+      manager.getCurrentWorkspace().save();
       break;
      case 37:
       e.stopPropagation();
@@ -174,10 +176,6 @@
       container: $('#container')
     });
 
-    var workspace = new Workspace({ name: 'Home' });
-    manager.addWorkspace(workspace);
-    manager.goToWorkspace(0);
-
     $('#container').height($(window).height());
 
     updatePaging();
@@ -188,6 +186,28 @@
 
     $(window).on('resize', function() {
       $('#container').height($(window).height());
+    });
+    manager.loadWorkspaces(function(spaces) {
+      if (spaces.length) {
+        for (var i = 0; i < spaces.length; i++) {
+          var s = new Workspace({ name: spaces[i].name, id: spaces[i].id, fromStore: true });
+          manager.addWorkspace(s);
+          for (var j = 0; j < spaces[i].panels.length; j++) {
+            s.addPanel(new Panel({
+              id: spaces[i].panels[j].id
+            }));
+          }
+        }
+        updatePaging();
+        setTimeout(function() {
+          $('.paging a[data-workspace="' + manager.getCurrentWorkspaceNum() + '"]').addClass('active');
+        }, 15);
+      } else {
+        var workspace = new Workspace({ name: 'Home' });
+        manager.addWorkspace(workspace);
+        manager.goToWorkspace(0);
+      }
+      manager.goToWorkspace(0);
     });
   }
 

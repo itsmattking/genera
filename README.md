@@ -67,4 +67,9 @@ There are also some other methods you'll want to override:
 
 ## Example Dashboard
 
-See index.html for an example dashboard setup utilizing all building blocks of Genera.
+To get started, see index.html for an example dashboard setup utilizing all building blocks of Genera.
+
+## Notes
+
+Genera depends on using CSS transitions to trigger events, so it's a good idea
+to use the example as a base to start from.
