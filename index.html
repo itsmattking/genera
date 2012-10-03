@@ -31,11 +31,7 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h2>Create fluid dashboards out of disparate parts</h2>
-
-<p>Genera is an extensible dashboard framework.</p>
-
-<h2>Concepts</h2>
+        <h2>Concepts</h2>
 
 <h3>The Panel</h3>
 
@@ -62,7 +58,7 @@ var manager = new WorkspaceManager({
 });
 
 var workspace = new Workspace({
-  title: 'Home'
+  name: 'Home'
 });
 
 manager.addWorkspace(workspace);
@@ -85,33 +81,37 @@ function ExtendedPanel(opts) {
 }
 
 ExtendedPanel.prototype = new Panel();
+
+workspace.addPanel(new ExtendedPanel({ title: 'New Panel' });
 </code></pre>
 
 <p>You can define handlers for several events on a Panel:</p>
 
 <ul>
 <li>
-<code>onAttach</code>: Called when a Panel is attached to a Workspace</li>
+<code>onAttach</code>: when a Panel is attached to a Workspace</li>
 <li>
-<code>onRemove</code>: Called when a Panel is removed from a Workspace</li>
+<code>onRemove</code>: when a Panel is removed from a Workspace</li>
 <li>
-<code>onEnter</code>: Called when the parent Workspace enters into view</li>
+<code>onEnter</code>: when the parent Workspace enters into view</li>
 <li>
-<code>onLeave</code>: Called when the parent Workspace leaves view</li>
+<code>onLeave</code>: when the parent Workspace leaves view</li>
 <li>
-<code>onClone</code>: Called when the Panel is cloned</li>
+<code>onClone</code>: when the Panel is cloned</li>
 <li>
-<code>onDragStart</code>: Called when a Panel has begun a drag action</li>
+<code>onDragStart</code>: when a Panel has begun a drag action</li>
 <li>
-<code>onDrag</code>: Called when a Panel is dragged</li>
+<code>onDrag</code>: when a Panel is dragged</li>
 <li>
-<code>onDragEnd</code>: Called when a Panel has stopped a drag action</li>
+<code>onDragEnd</code>: when a Panel has stopped a drag action</li>
 </ul><p>There are also some other methods you'll want to override:</p>
 
 <ul>
 <li>
 <code>toJSON</code>: Return the serialized version of your Panel to be saved into store</li>
-</ul>
+</ul><h2>Example Dashboard</h2>
+
+<p>See index.html for an example dashboard setup utilizing all building blocks of Genera.</p>
       </section>
     </div>
 
