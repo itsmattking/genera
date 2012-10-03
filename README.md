@@ -72,4 +72,9 @@ To get started, see index.html for an example dashboard setup utilizing all buil
 ## Notes
 
 Genera depends on using CSS transitions to trigger events, so it's a good idea
-to use the example as a base to start from.
+to use the example as a base to start from to get an idea of how it all works
+instead of starting from scratch.
+
+## Dependencies
+
+Genera depends on jQuery 1.7.2 or higher.
