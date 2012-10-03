@@ -4,29 +4,17 @@
     Workspace = genera.Workspace,
     Panel = genera.Panel;
 
-  var manager = new WorkspaceManager({
-    container: $('#wall')
-  });
-
-  function addVis() {
-    var s = new Workspace();
-    for (var i = 0, len = Math.ceil(Math.random()*9); i < len; i++) {
-      s.addPanel(new Panel({}));
-    }
-    manager.addWorkspace(s);
-  }
-
-  for (var i = 0; i < 12; i++) {
-    addVis();
-  }
-  manager.goToWorkspace(0);
-
   function updatePaging() {
-    var workspaceCount = $('.workspace').length;
+    var workspaceCount = manager.workspaces.length;
+    if (workspaceCount === 1) {
+      $('.paging').hide();
+    } else {
+      $('.paging').show();
+    }
     var out = [];
-    $('.workspace').each(function(i, item) {
+    for (var i = 0; i < workspaceCount; i++) {
       out.push('<a href="#" data-workspace="' + i + '">&bull;</a>');
-    });
+    }
     $('.paging').html(out.join(""));
     $('.paging').css({ marginLeft: ($('.paging').width() / 2)*-1 });
   }
@@ -60,46 +48,9 @@
     $('.paging a[data-workspace="' + manager.getCurrentWorkspaceNum() + '"]').addClass('active');
   });
 
-  $('form').on('submit', function(e) {
-    manager.goToWorkspace(parseInt($('#num').val()));
-    e.preventDefault();
-    return false;
-  });
-
   $(window).on('resize', function() {
     $('#wall').height($(window).height());
   });
-
-  function handleHUDEscapement(e) {
-    if (!$(e.target).hasClass('hud') &&
-        !$(e.target).parents('.hud').length) {
-      var curHUD = $('.hud.active');
-      $(window.document.body).off('click', handleHUDEscapement);
-      hideHUD('#' + curHUD.attr('id'));
-    }
-  }
-
-  function hideHUD(id) {
-    $('.overlay').on('webkitTransitionEnd', function() {
-      $(this).remove();
-    });
-    $(id).removeClass('active');
-    $('.overlay').removeClass('active');
-  }
-
-  function showHUD(id) {
-    $(window.document.body).append('<div class="overlay"></div>');
-    $(window.document.body).on('click', handleHUDEscapement);
-    setTimeout(function() {
-      $(id).addClass('active');
-      $('.overlay').addClass('active');
-    }, 15);
-  }
-
-  function toggleHUD(id) {
-    $('.overlay').length ? hideHUD(id) : showHUD(id);
-    return false;
-  }
 
   function toggleAddMenu() {
     $('#nav #manage-menu').removeClass('open');
@@ -121,7 +72,7 @@
     var action = $(e.target).attr('data-action');
     switch (action) {
      case 'new-panel':
-      toggleHUD('#new-panel-hud');
+      manager.getCurrentWorkspace().addPanel(new Panel({}));
       break;
      case 'new-workspace':
       var s = new Workspace({ name: 'New Workspace' });
@@ -220,59 +171,22 @@
     }
   });
 
-  $('#new-panel-hud img').on('click', function() {
-    manager.getCurrentWorkspace().addPanel(new Panel({}));
-    toggleHUD('#new-panel-hud');
-    return false;
+  var manager = new WorkspaceManager({
+    container: $('#wall')
   });
+
+  var workspace = new Workspace({ name: 'Home' });
+  manager.addWorkspace(workspace);
+  manager.goToWorkspace(0);
 
   $('#wall').height($(window).height());
   $('.paging a').removeClass('active');
   $('.paging a[data-workspace="' + manager.getCurrentWorkspaceNum() + '"]').addClass('active');
+
   updatePaging();
   window.manager = manager;
   setTimeout(function() {
     $('.paging').addClass('animate');
   }, 15);
-
-  var startTouch = {
-    x: 0,
-    y: 0
-  },
-  endTouch = {
-    x: 0,
-    y: 0
-  };
-  var resetMove;
-  $('#wall').on('touchstart', function(e) {
-    startTouch.x = e.originalEvent.touches[0].clientX;
-    startTouch.y = e.originalEvent.touches[0].clientY;
-  });
-  $('#wall').on('touchend', function(e) {
-    clearTimeout(resetMove);
-    var diff = startTouch.x - endTouch.x;
-    if (Math.abs(diff) > 200) {
-      if (diff < 0) {
-        manager.previousWorkspace();
-      } else {
-        manager.nextWorkspace();
-      }
-    }
-    startTouch.x = 0, startTouch.y = 0;
-    endTouch.x = 0, endTouch.y = 0;
-  });
-  $('#wall').on('touchmove', function(e) {
-    if (e.originalEvent) {
-      window.console.log(e.originalEvent.touches[0].webkitForce);
-      endTouch.x = e.originalEvent.touches[0].clientX;
-      endTouch.y = e.originalEvent.touches[0].clientY;
-      e.preventDefault();
-    }
-    clearTimeout(resetMove);
-    resetMove = setTimeout(function() {
-      startTouch.x = 0;
-      endTouch.y = 0;
-    }, 200);
-  });
 
 }(genera, jQuery, window));
