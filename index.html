@@ -1,36 +1,43 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Genera : Symbiotic Dashboard Framework" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Genera by mattking17</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>Genera</title>
   </head>
-
   <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/mattking17/genera">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/mattking17/genera/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/mattking17/genera/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/mattking17/genera">View on GitHub</a>
+    <div class="wrapper">
 
-          <h1 id="project_title">Genera</h1>
-          <h2 id="project_tagline">Symbiotic Dashboard Framework</h2>
+      <section>
+        <div id="title">
+          <h1>Genera</h1>
+          <p>Symbiotic Dashboard Framework</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/mattking17">mattking17</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
+        </div>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/mattking17/genera/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/mattking17/genera/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
         <h2>Concepts</h2>
 
 <h3>The Panel</h3>
@@ -80,7 +87,7 @@ function ExtendedPanel(opts) {
   }
 }
 
-ExtendedPanel.prototype = new Panel();
+genera.Base.inherit(ExtendedPanel, Panel);
 
 workspace.addPanel(new ExtendedPanel({ title: 'New Panel' });
 </code></pre>
@@ -113,17 +120,9 @@ workspace.addPanel(new ExtendedPanel({ title: 'New Panel' });
 
 <p>See index.html for an example dashboard setup utilizing all building blocks of Genera.</p>
       </section>
-    </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Genera maintained by <a href="https://github.com/mattking17">mattking17</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
     </div>
-
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
     
-
   </body>
 </html>
