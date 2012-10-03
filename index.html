@@ -34,6 +34,24 @@
         <h1>Create fluid dashboards out of disparate parts</h1>
 
 <h2>How it works</h2>
+
+<pre><code>var WorkspaceManager = genera.WorkspaceManager,
+    Workspace = genera.Workspace,
+    Panel = genera.Panel;
+
+var manager = new WorkspaceManager({
+  container: $('#container')
+});
+
+var workspace = new Workspace({
+  title: 'Home'
+});
+
+manager.addWorkspace(workspace);
+manager.goToWorkspace(workspace);
+
+workspace.addPanel(new Panel({}));
+</code></pre>
       </section>
     </div>
 
